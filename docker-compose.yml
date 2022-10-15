@@ -22,6 +22,7 @@ services:
     labels:
       ofelia.job-run.free-games-claimer1.schedule: "@every 24h"
       ofelia.job-run.free-games-claimer1.container: "free-games-claimer1"
+      ofelia.job-run.free-games-claimer2.command: "node epic-games"
 
   free-games-claimer2:
     <<: *default
@@ -40,4 +41,4 @@ services:
     labels:
       ofelia.job-run.free-games-claimer2.schedule: "@every 24h"
       ofelia.job-run.free-games-claimer2.container: "free-games-claimer2"
-
+      ofelia.job-run.free-games-claimer2.command: "node prime-gaming show"
