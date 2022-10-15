@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  free-games-claimer:
+    build: ./
+    image: free-games-claimer:latest
+    restart: unless-stopped
+    container_name: free-games-claimer
+    volumes:
+      - /home/free-games-claimer:/fgc/data
