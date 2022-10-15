@@ -7,3 +7,5 @@ services:
     container_name: free-games-claimer
     volumes:
       - /home/free-games-claimer:/fgc/data
+    ports:
+      - 5900:5900
