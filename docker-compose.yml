@@ -1,9 +1,44 @@
 version: '3.7'
 services:
-  free-games-claimer:
+  free-games-claimer1:
     build: ./
-    image: free-games-claimer:latest
-    restart: unless-stopped
-    container_name: free-games-claimer
+    <<: &default
+      image: free-games-claimer:latest
+    container_name: free-games-claimer1
     volumes:
       - /home/free-games-claimer:/fgc/data
+    ports:
+      - 5900:5900
+
+  scheduler1: &default1
+    image: mcuadros/ofelia:latest
+    container_name: free-games-scheduler1
+    restart: unless-stopped
+    depends_on:
+      - free-games-claimer1
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-run.free-games-claimer1.schedule: "@every 24h"
+      ofelia.job-run.free-games-claimer1.container: "free-games-claimer1"
+      ofelia.job-run.free-games-claimer1.command: "node epic-games"
+
+  free-games-claimer2:
+    <<: *default
+    container_name: free-games-claimer2
+    volumes:
+      - /home/free-games-claimer:/fgc/data
+    ports:
+      - 5901:5900
+    command: ["node", "prime-gaming", "show"]
+
+  scheduler2:
+    <<: *default1
+    container_name: free-games-scheduler2
+    depends_on:
+      - free-games-claimer2
+    labels:
+      ofelia.job-run.free-games-claimer2.schedule: "@every 24h"
+      ofelia.job-run.free-games-claimer2.container: "free-games-claimer2"
+      ofelia.job-run.free-games-claimer2.command: "node prime-gaming show"
